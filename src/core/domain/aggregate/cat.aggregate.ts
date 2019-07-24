@@ -1,8 +1,10 @@
+import { ICatEvent } from '../events';
 import { CatAlreadyAdoptedException } from '../exceptions';
 import { CatId, CatInformation, CatModel } from '../model';
 
 export class CatAggregate {
   private _model!: CatModel;
+  private _uncommittedChanges: ICatEvent[] = [];
 
   public static register(information: CatInformation): CatAggregate {
     return new CatAggregate(CatId.create(), information);
@@ -21,5 +23,9 @@ export class CatAggregate {
 
   public get model(): CatModel {
     return this._model;
+  }
+
+  public get uncommittedChanges(): ICatEvent[] {
+    return this._uncommittedChanges;
   }
 }

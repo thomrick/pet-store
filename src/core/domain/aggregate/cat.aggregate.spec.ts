@@ -1,3 +1,4 @@
+import { CatRegistered } from '../events';
 import { CatAlreadyAdoptedException } from '../exceptions';
 import { CatId, CatInformation, CatModel } from '../model';
 import { CatAggregate } from './cat.aggregate';
@@ -17,6 +18,10 @@ describe('CatAggregate', () => {
     expect(model.id).toBeInstanceOf(CatId);
     expect(model.name).toEqual(information.name);
     expect(aggregate.model.isAdopted).toBeFalsy();
+  });
+
+  xit('should add a cat registered event', () => {
+    expect(aggregate.uncommittedChanges).toContainEqual(new CatRegistered(aggregate.model.id, information));
   });
 
   it('should adopt the cat', () => {

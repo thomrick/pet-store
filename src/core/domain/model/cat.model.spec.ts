@@ -1,3 +1,4 @@
+import { CatAdopted, CatRegistered } from '../events';
 import { CatId } from './cat.id';
 import { CatInformation } from './cat.information';
 import { CatModel } from './cat.model';
@@ -19,7 +20,7 @@ describe('CatModel', () => {
   });
 
   it('should apply register', () => {
-    model.state().applyRegister(id, information);
+    model.state().apply(new CatRegistered(id, information));
 
     expect(model.id).toEqual(id);
     expect(model.name).toEqual(information.name);
@@ -27,9 +28,9 @@ describe('CatModel', () => {
   });
 
   it('should apply adopt', () => {
-    model.state().applyRegister(id, information);
+    model.state().apply(new CatRegistered(id, information));
 
-    model.state().applyAdopt();
+    model.state().apply(new CatAdopted(id));
 
     expect(model.isAdopted).toBeTruthy();
   });
