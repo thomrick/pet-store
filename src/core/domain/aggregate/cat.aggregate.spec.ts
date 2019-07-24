@@ -1,12 +1,16 @@
+import { CatAlreadyAdoptedException } from '../exceptions';
 import { CatId, CatModel } from '../model';
 import { CatAggregate } from './cat.aggregate';
 
 describe('CatAggregate', () => {
+  const name: string = 'name';
+  let aggregate: CatAggregate;
+
+  beforeEach(() => {
+    aggregate = CatAggregate.register(name);
+  });
+
   it('should register a new aggregate', () => {
-    const name = 'name';
-
-    const aggregate = CatAggregate.register(name);
-
     const model = aggregate.model;
     expect(model).toBeInstanceOf(CatModel);
     expect(model.id).toBeInstanceOf(CatId);
@@ -15,12 +19,14 @@ describe('CatAggregate', () => {
   });
 
   it('should adopt the cat', () => {
-    const name = 'name';
-
-    const aggregate = CatAggregate.register(name);
-
     aggregate.adopt();
 
     expect(aggregate.model.isAdopted).toBeTruthy();
+  });
+
+  it('should throw an error caused by cat already adopted', () => {
+    aggregate.adopt();
+
+    expect(() => aggregate.adopt()).toThrow(CatAlreadyAdoptedException);
   });
 });

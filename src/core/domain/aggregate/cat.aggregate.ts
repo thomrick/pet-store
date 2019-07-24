@@ -1,3 +1,4 @@
+import { CatAlreadyAdoptedException } from '../exceptions';
 import { CatId, CatModel } from '../model';
 
 export class CatAggregate {
@@ -12,6 +13,9 @@ export class CatAggregate {
   }
 
   public adopt(): void {
+    if (this._model.isAdopted) {
+      throw new CatAlreadyAdoptedException(this._model.id);
+    }
     this._model.state().applyAdopt();
   }
 
