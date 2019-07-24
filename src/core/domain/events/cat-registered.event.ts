@@ -1,3 +1,4 @@
+import { CatAggregate } from '../aggregate';
 import { CatId, CatInformation } from '../model';
 import { ICatEvent } from './cat-event.interface';
 
@@ -10,5 +11,9 @@ export class CatRegistered implements ICatEvent {
   constructor(id: CatId, information: CatInformation) {
     this.id = id;
     this.information = information;
+  }
+
+  public apply(aggregate: CatAggregate): CatAggregate {
+    return aggregate.apply(this);
   }
 }
