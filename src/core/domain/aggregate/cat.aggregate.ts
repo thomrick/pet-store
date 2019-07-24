@@ -48,6 +48,6 @@ export class CatAggregate {
   }
 
   public get uncommittedChanges(): ICatEvent[] {
-    return this._uncommittedChanges;
+    return this._uncommittedChanges.splice(0, this._uncommittedChanges.length);
   }
 }
