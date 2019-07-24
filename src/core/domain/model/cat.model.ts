@@ -1,4 +1,5 @@
-import { CatId } from './cat-id';
+import { CatId } from './cat.id';
+import { CatInformation } from './cat.information';
 
 export class CatModel {
   private _id!: CatId;
@@ -25,9 +26,9 @@ export class CatModel {
         this.model = model;
       }
 
-      public applyRegister(id: CatId, name: string): CatModel {
+      public applyRegister(id: CatId, information: CatInformation): CatModel {
         this.model._id = id;
-        this.model._name = name;
+        this.model._name = information.name;
         this.model._adopted = false;
         return this.model;
       }

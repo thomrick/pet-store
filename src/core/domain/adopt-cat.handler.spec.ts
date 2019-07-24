@@ -1,12 +1,18 @@
 import { AdoptCatHandler } from './adopt-cat.handler';
 import { CatAggregate } from './aggregate';
 import { CatAlreadyAdoptedException, CatNotFoundException } from './exceptions';
-import { CatId } from './model';
+import { CatId, CatInformation } from './model';
 import { ICatRepository } from './ports';
 
 describe('AdoptCatHandler', () => {
+  let aggregate: CatAggregate;
+
+  beforeEach(() => {
+    const information = new CatInformation('name');
+    aggregate = CatAggregate.register(information);
+  });
+
   it('should adopt the cat', () => {
-    const aggregate = CatAggregate.register('name');
     spyOn(aggregate, 'adopt');
     const repository: ICatRepository = {
       save: jest.fn(),
@@ -32,7 +38,6 @@ describe('AdoptCatHandler', () => {
   });
 
   it('should throw an error if cat is already adopted', () => {
-    const aggregate = CatAggregate.register('name');
     jest.spyOn(aggregate, 'adopt').mockImplementation(() => {
       throw new CatAlreadyAdoptedException(aggregate.model.id);
     });

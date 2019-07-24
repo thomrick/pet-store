@@ -1,20 +1,21 @@
 import { CatAlreadyAdoptedException } from '../exceptions';
-import { CatId, CatModel } from '../model';
+import { CatId, CatInformation, CatModel } from '../model';
 import { CatAggregate } from './cat.aggregate';
 
 describe('CatAggregate', () => {
-  const name: string = 'name';
+  let information: CatInformation;
   let aggregate: CatAggregate;
 
   beforeEach(() => {
-    aggregate = CatAggregate.register(name);
+    information = new CatInformation('name');
+    aggregate = CatAggregate.register(information);
   });
 
   it('should register a new aggregate', () => {
     const model = aggregate.model;
     expect(model).toBeInstanceOf(CatModel);
     expect(model.id).toBeInstanceOf(CatId);
-    expect(model.name).toEqual(name);
+    expect(model.name).toEqual(information.name);
     expect(aggregate.model.isAdopted).toBeFalsy();
   });
 

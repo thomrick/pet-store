@@ -1,34 +1,33 @@
-import { CatId } from './cat-id';
+import { CatId } from './cat.id';
+import { CatInformation } from './cat.information';
 import { CatModel } from './cat.model';
 
 describe('CatModel', () => {
+  const id = CatId.create();
+  const information = new CatInformation('name');
+
   let model: CatModel;
 
   beforeEach(() => {
     model = new CatModel();
   });
 
-  it('should create a model with an empty', () => {
+  it('should create a model with an empty state', () => {
     expect(model.id).toBeUndefined();
     expect(model.name).toBeUndefined();
     expect(model.isAdopted).toBeFalsy();
   });
 
   it('should apply register', () => {
-    const id = CatId.create();
-    const name = 'name';
-
-    model.state().applyRegister(id, name);
+    model.state().applyRegister(id, information);
 
     expect(model.id).toEqual(id);
-    expect(model.name).toEqual(name);
+    expect(model.name).toEqual(information.name);
     expect(model.isAdopted).toBeFalsy();
   });
 
   it('should apply adopt', () => {
-    const id = CatId.create();
-    const name = 'name';
-    model.state().applyRegister(id, name);
+    model.state().applyRegister(id, information);
 
     model.state().applyAdopt();
 

@@ -1,4 +1,5 @@
 import { CatAggregate } from './aggregate';
+import { CatInformation } from './model';
 import { ICatRepository } from './ports';
 import { RegisterCatHandler } from './register-cat.handler';
 
@@ -9,8 +10,9 @@ describe('RegisterCatHandler', () => {
       get: jest.fn(),
     };
     const handler = new RegisterCatHandler(repository);
+    const information = new CatInformation('name');
 
-    handler.registerCatWhith('name');
+    handler.registerCatWhith(information);
 
     expect(repository.save).toHaveBeenCalledWith(jasmine.any(CatAggregate));
   });

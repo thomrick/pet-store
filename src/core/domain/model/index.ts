@@ -1,2 +1,3 @@
+export * from './cat.id';
+export * from './cat.information';
 export * from './cat.model';
-export * from './cat-id';

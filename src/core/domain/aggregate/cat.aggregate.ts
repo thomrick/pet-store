@@ -1,15 +1,15 @@
 import { CatAlreadyAdoptedException } from '../exceptions';
-import { CatId, CatModel } from '../model';
+import { CatId, CatInformation, CatModel } from '../model';
 
 export class CatAggregate {
   private _model!: CatModel;
 
-  public static register(name: string): CatAggregate {
-    return new CatAggregate(CatId.create(), name);
+  public static register(information: CatInformation): CatAggregate {
+    return new CatAggregate(CatId.create(), information);
   }
 
-  private constructor(id: CatId, name: string) {
-    this._model = new CatModel().state().applyRegister(id, name);
+  private constructor(id: CatId, information: CatInformation) {
+    this._model = new CatModel().state().applyRegister(id, information);
   }
 
   public adopt(): void {
