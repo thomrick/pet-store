@@ -9,7 +9,9 @@
       true,
       "single"
     ],
-    "member-ordering": false
+    "member-ordering": false,
+    "variable-name": false,
+    "max-classes-per-file": false
   },
   "rulesDirectory": []
 }

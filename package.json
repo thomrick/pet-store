@@ -1,5 +1,5 @@
 {
-  "name": "@thomrick/nest-recipes",
+  "name": "@thomrick/pet-store",
   "version": "0.0.0",
   "description": "A Nest application that use many recipes about Nest framework",
   "main": "index.js",
