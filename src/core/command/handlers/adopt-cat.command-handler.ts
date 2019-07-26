@@ -17,4 +17,8 @@ export class AdoptCatCommandHandler implements ICommandHandler {
     aggregate.adopt();
     this.repository.save(aggregate);
   }
+
+  public subscribe(): string {
+    return AdoptCat.name;
+  }
 }

@@ -13,4 +13,8 @@ export class RegisterCatCommandHandler implements ICommandHandler {
     const aggregate = CatAggregate.register(command.information);
     this.repository.save(aggregate);
   }
+
+  public subscribe(): string {
+    return RegisterCat.name;
+  }
 }
