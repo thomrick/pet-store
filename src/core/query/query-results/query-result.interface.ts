@@ -1,3 +1,3 @@
 export interface IQueryResult {
-  getData(): any;
+  readonly data: any;
 }

@@ -23,6 +23,6 @@ describe('FindOneCatByIdQueryHandler', () => {
     const result: IQueryResult = handler.handle(new FindOneCatById(aggregate.model.id));
 
     expect(repository.get).toHaveBeenCalledWith(aggregate.model.id);
-    expect(result.getData()).toEqual(aggregate);
+    expect(result.data).toEqual(aggregate);
   });
 });

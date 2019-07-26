@@ -19,9 +19,7 @@ describe('InMemoryQueryBus', () => {
     };
     const handlers: IQueryHandler[] = [
       {
-        handle: jest.fn().mockImplementationOnce(() => ({
-          getData: () => data,
-        })),
+        handle: jest.fn().mockImplementationOnce(() => ({ data })),
         subscribe: jest.fn().mockImplementationOnce(() => query.name),
       },
       {
@@ -35,7 +33,7 @@ describe('InMemoryQueryBus', () => {
 
     expect(handlers[0].handle).toHaveBeenCalledWith(query);
     expect(handlers[1].handle).not.toHaveBeenCalled();
-    expect(result.getData()).toEqual(data);
+    expect(result.data).toEqual(data);
   });
 
   it('should return a default null result when no handler is found', () => {
@@ -47,6 +45,6 @@ describe('InMemoryQueryBus', () => {
 
     const result: IQueryResult = bus.ask(query);
 
-    expect(result.getData()).toBe(null);
+    expect(result.data).toBe(null);
   });
 });

@@ -7,7 +7,7 @@ export class CatModel {
   private _name!: string;
   private _adopted!: boolean;
 
-  public get id(): any {
+  public get id(): CatId {
     return this._id;
   }
 

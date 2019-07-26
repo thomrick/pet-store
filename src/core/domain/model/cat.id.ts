@@ -7,6 +7,10 @@ export class CatId {
     return new CatId(uuid());
   }
 
+  public static from(value: string): CatId {
+    return new CatId(value);
+  }
+
   private constructor(value: string) {
     this.value = value;
   }

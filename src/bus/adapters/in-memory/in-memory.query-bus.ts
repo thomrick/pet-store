@@ -13,7 +13,7 @@ export class InMemoryQueryBus implements IQueryBus {
       return handler.handle(query);
     }
     return {
-      getData: () => null,
+      data: null,
     };
   }
 }
