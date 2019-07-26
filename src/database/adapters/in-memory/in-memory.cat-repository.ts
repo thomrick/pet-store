@@ -1,4 +1,4 @@
-import { CatAggregate, CatId, ICatEvent, ICatRepository } from '../../../domain';
+import { CatAggregate, CatId, ICatEvent, ICatRepository } from '../../../core';
 
 export class InMemoryCatRepository implements ICatRepository {
   private readonly database: Map<CatId, ICatEvent[]>;

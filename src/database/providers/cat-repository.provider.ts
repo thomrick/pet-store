@@ -1,5 +1,6 @@
 import { Provider } from '@nestjs/common';
-import { ICatRepository, InMemoryCatRepository } from '../../core';
+import { ICatRepository } from '../../core';
+import { InMemoryCatRepository } from '../adapters';
 
 const CAT_REPOSITORY = 'CatRepository';
 

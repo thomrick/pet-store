@@ -1,4 +1,4 @@
-import { CatAggregate, CatId, CatInformation, CatRegistered, ICatEvent, ICatRepository } from '../../../domain';
+import { CatAggregate, CatId, CatInformation, CatRegistered, ICatEvent, ICatRepository } from '../../../core';
 import { InMemoryCatRepository } from './in-memory.cat-repository';
 
 describe('InMemoryCatRepository', () => {
