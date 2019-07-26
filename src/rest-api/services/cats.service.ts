@@ -1,5 +1,5 @@
 import { Inject, NotFoundException } from '@nestjs/common';
-import { COMMAND_BUS, QUERY_BUS } from '../../../bus';
+import { COMMAND_BUS, QUERY_BUS } from '../../bus';
 import {
   CatAggregate,
   CatId,
@@ -9,8 +9,8 @@ import {
   ICommandBus,
   IQueryBus,
   RegisterCat,
-} from '../../../core';
-import { CreateCatDto } from '../dto';
+} from '../../core';
+import { CatDto } from '../dto';
 
 export class CatsService {
   private readonly commands: ICommandBus;
@@ -24,8 +24,8 @@ export class CatsService {
     this.queries = queries;
   }
 
-  public create(dto: CreateCatDto) {
-    const command = new RegisterCat(new CatInformation(dto.name));
+  public create(dto: CatDto) {
+    const command = new RegisterCat(new CatInformation(dto.name!));
     this.commands.dispatch(command);
   }
 

@@ -1,6 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { BusModule, COMMAND_BUS, QUERY_BUS } from '../../../bus';
+import { BusModule, COMMAND_BUS, QUERY_BUS } from '../../bus';
 import {
   CatAggregate,
   CatId,
@@ -10,8 +10,8 @@ import {
   ICommandBus,
   IQueryBus,
   RegisterCat,
-} from '../../../core';
-import { CreateCatDto } from '../dto';
+} from '../../core';
+import { CatDto } from '../dto';
 import { CatsService } from './cats.service';
 
 describe('CatsService', () => {
@@ -44,7 +44,7 @@ describe('CatsService', () => {
   });
 
   it('should dispatch a register cat command', () => {
-    service.create(new CreateCatDto('name'));
+    service.create(CatDto.with('name'));
 
     expect(commands.dispatch).toHaveBeenCalledWith(new RegisterCat(new CatInformation('name')));
   });
