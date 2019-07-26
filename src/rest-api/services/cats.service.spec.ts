@@ -53,10 +53,10 @@ describe('CatsService', () => {
     const aggregate = CatAggregate.register(new CatInformation('name'));
     (queries.ask as jest.Mock).mockImplementationOnce(() => new FindOneCatQueryResult(aggregate));
 
-    const result: CatAggregate | null = service.findOneById(aggregate.model.id.value);
+    const result: CatDto = service.findOneById(aggregate.model.id.value);
 
     expect(queries.ask).toHaveBeenCalledWith(new FindOneCatById(aggregate.model.id));
-    expect(result).toEqual(aggregate);
+    expect(result).toEqual(CatDto.from(aggregate));
   });
 
   it('should throw a HTTP Not Found exception when cat is not found', () => {

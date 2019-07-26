@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CatDto } from '../dto';
 import { CatsService } from '../services';
 import { CreateCatValidator } from '../validators';
@@ -14,5 +14,10 @@ export class CatsController {
   @Post()
   public create(@Body(CreateCatValidator) dto: CatDto) {
     return this.service.create(dto);
+  }
+
+  @Get(':id')
+  public findOneById(@Param('id') id: string) {
+    return this.service.findOneById(id);
   }
 }

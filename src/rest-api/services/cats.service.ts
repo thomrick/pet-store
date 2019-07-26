@@ -1,7 +1,6 @@
 import { Inject, NotFoundException } from '@nestjs/common';
 import { COMMAND_BUS, QUERY_BUS } from '../../bus';
 import {
-  CatAggregate,
   CatId,
   CatInformation,
   FindOneCatById,
@@ -29,11 +28,11 @@ export class CatsService {
     this.commands.dispatch(command);
   }
 
-  public findOneById(id: string): CatAggregate {
+  public findOneById(id: string): CatDto {
     const result: FindOneCatQueryResult = this.queries.ask(new FindOneCatById(CatId.from(id)));
     if (result.data === null) {
       throw new NotFoundException();
     }
-    return result.data;
+    return CatDto.from(result.data);
   }
 }

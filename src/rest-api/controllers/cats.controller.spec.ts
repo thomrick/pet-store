@@ -1,12 +1,13 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import request from 'supertest';
+import request, { Response } from 'supertest';
+import { CatAggregate, CatInformation } from '../../core';
 import { CatDto } from '../dto';
 import { CatsService } from '../services';
 import { CatsController } from './cats.controller';
 
 describe('CatsController', () => {
-  let server: any;
+  let application: INestApplication;
   let service: CatsService;
 
   beforeEach(async () => {
@@ -21,18 +22,22 @@ describe('CatsController', () => {
     .overrideProvider(CatsService)
     .useValue({
       create: jest.fn(),
+      findOneById: jest.fn(),
     })
     .compile();
-    const application: INestApplication = module.createNestApplication();
+    application = module.createNestApplication();
     await application.init();
-    server = application.getHttpServer();
     service = module.get(CatsService);
   });
 
-  it('POST /cats create a new cat', () => {
+  afterEach(async () => {
+    return application.close();
+  });
+
+  it('POST /cats create a new cat', async () => {
     const dto = CatDto.with('name');
 
-    return request(server)
+    return request(application.getHttpServer())
       .post('/cats')
       .send(dto)
       .expect(201)
@@ -41,13 +46,37 @@ describe('CatsController', () => {
       });
   });
 
-  it('POST /cats throw Bad Request Exception when required fields are not provided', () => {
-    return request(server)
+  it('POST /cats throw Bad Request Exception when required fields are not provided', async () => {
+    return request(application.getHttpServer())
       .post('/cats')
       .send({})
       .expect(400)
       .then(() => {
         expect(service.create).not.toHaveBeenCalled();
       });
+  });
+
+  it('GET /cats/:id should return a found cat dto', async () => {
+    const aggregate = CatAggregate.register(new CatInformation('name'));
+    const dto = CatDto.from(aggregate);
+    (service.findOneById as jest.Mock).mockImplementationOnce(() => dto);
+
+    return request(application.getHttpServer())
+      .get(`/cats/${aggregate.model.id.value}`)
+      .expect(200)
+      .then((response: Response) => {
+        expect(service.findOneById).toHaveBeenCalledWith(aggregate.model.id.value);
+        expect(response.body).toEqual(dto);
+      });
+  });
+
+  it('GET /cats/:id throw a Not Found exception when cat by id is not found', async () => {
+    (service.findOneById as jest.Mock).mockImplementationOnce(() => {
+      throw new NotFoundException();
+    });
+
+    return request(application.getHttpServer())
+      .get(`/cats/fake-id`)
+      .expect(404);
   });
 });
