@@ -37,4 +37,16 @@ describe('InMemoryQueryBus', () => {
     expect(handlers[1].handle).not.toHaveBeenCalled();
     expect(result.getData()).toEqual(data);
   });
+
+  it('should return a default null result when no handler is found', () => {
+    const query: IQuery = {
+      name: 'FakeQuery',
+    };
+    const handlers: IQueryHandler[] = [];
+    const bus: IQueryBus = new InMemoryQueryBus(handlers);
+
+    const result: IQueryResult = bus.ask(query);
+
+    expect(result.getData()).toBe(null);
+  });
 });
