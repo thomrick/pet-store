@@ -1,5 +1,5 @@
 import { Provider } from '@nestjs/common';
-import { AdoptCatCommandHandler, ICommandHandler, RegisterCatCommandHandler } from '../../core';
+import { AdoptCatCommandHandler, ICommandHandler, RegisterCatCommandHandler } from '../../../core';
 
 export const COMMAND_HANDLERS: string = 'CommandHandlers';
 

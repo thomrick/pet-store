@@ -1,6 +1,6 @@
 import { Provider } from '@nestjs/common';
-import { ICommandBus, ICommandHandler } from '../../core';
-import { InMemoryCommandBus } from '../adapters';
+import { ICommandBus, ICommandHandler } from '../../../core';
+import { InMemoryCommandBus } from '../../adapters';
 import { COMMAND_HANDLERS } from './command-handlers.provider';
 
 export const COMMAND_BUS: string = 'CommandBus';

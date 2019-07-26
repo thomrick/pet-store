@@ -1,6 +1,6 @@
 import { Provider } from '@nestjs/common';
-import { AdoptCatCommandHandler, ICatRepository, ICommandHandler } from '../../core';
-import { CAT_REPOSITORY } from '../../database';
+import { AdoptCatCommandHandler, ICatRepository, ICommandHandler } from '../../../core';
+import { CAT_REPOSITORY } from '../../../database';
 
 export const AdoptCatCommandHandlerProvider: Provider = {
   provide: AdoptCatCommandHandler,

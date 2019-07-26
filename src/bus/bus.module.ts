@@ -1,10 +1,10 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { DatabaseModule } from '../database';
 import {
-  AdoptCatCommandHandlerProvider,
   CommandBus,
-  CommandHandlers,
-  RegisterCatCommandHandlerProvider,
+  CommandProviders,
+  QueryBus,
+  QueryProviders,
 } from './providers';
 
 @Module({
@@ -12,13 +12,12 @@ import {
     forwardRef(() => DatabaseModule),
   ],
   providers: [
-    RegisterCatCommandHandlerProvider,
-    AdoptCatCommandHandlerProvider,
-    CommandHandlers,
-    CommandBus,
+    ...CommandProviders,
+    ...QueryProviders,
   ],
   exports: [
     CommandBus,
+    QueryBus,
   ],
 })
 export class BusModule {}
