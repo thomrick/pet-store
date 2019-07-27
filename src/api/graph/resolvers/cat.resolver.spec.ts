@@ -9,12 +9,17 @@ import {
   FindAllCatsQueryResult,
   ICommandBus,
   IQueryBus,
+  RegisterCat,
 } from '../../../core';
 import { CatDto } from '../../dto';
 import { GraphApiModule } from '../graph-api.module';
 
 describe('CatResolver', () => {
-  it('should get all cats', async () => {
+  let application: INestApplication;
+  let commands: ICommandBus;
+  let queries: IQueryBus;
+
+  beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         GraphApiModule,
@@ -29,12 +34,34 @@ describe('CatResolver', () => {
       ask: jest.fn(),
     })
     .compile();
-    const application: INestApplication = module.createNestApplication();
+    application = module.createNestApplication();
     await application.init();
+    commands = application.get(COMMAND_BUS);
+    queries = application.get(QUERY_BUS);
+  });
 
-    const commands: ICommandBus = application.get(COMMAND_BUS);
-    const queries: IQueryBus = application.get(QUERY_BUS);
+  afterEach(async () => {
+    return application.close();
+  });
 
+  it('should dispatch command to register a new cat', async () => {
+    const response: Response = await request(application.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `mutation {
+          register(input: { name: "name"}) { name }
+        }`,
+      })
+      .expect(200);
+    expect(commands.dispatch).toHaveBeenCalledWith(new RegisterCat(new CatInformation('name')));
+    // expect(response.body.data.register).toEqual({
+    //   id: jasmine.any(String),
+    //   name: 'name',
+    //   adopted: false,
+    // });
+  });
+
+  it('should get all cats', async () => {
     const aggregates = [
       CatAggregate.register(new CatInformation('nameA')),
       CatAggregate.register(new CatInformation('nameB')),
@@ -45,8 +72,6 @@ describe('CatResolver', () => {
     const response: Response = await request(application.getHttpServer())
       .post('/graphql')
       .send({
-        operationName: null,
-        varaibles: {},
         query: `{
           cats {
             id

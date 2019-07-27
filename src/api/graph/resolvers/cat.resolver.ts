@@ -1,7 +1,14 @@
 import { Inject } from '@nestjs/common';
-import { Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { COMMAND_BUS, QUERY_BUS } from '../../../bus';
-import { FindAllCats, FindAllCatsQueryResult, ICommandBus, IQueryBus } from '../../../core';
+import {
+  CatInformation,
+  FindAllCats,
+  FindAllCatsQueryResult,
+  ICommandBus,
+  IQueryBus,
+  RegisterCat,
+} from '../../../core';
 import { CatDto } from '../../dto';
 
 @Resolver('Cat')
@@ -12,6 +19,12 @@ export class CatResolver {
   constructor(@Inject(COMMAND_BUS) commands: ICommandBus, @Inject(QUERY_BUS) queries: IQueryBus) {
     this.commands = commands;
     this.queries = queries;
+  }
+
+  @Mutation()
+  public register(@Args('input') dto: CatDto): CatDto {
+    this.commands.dispatch(new RegisterCat(new CatInformation(dto.name!)));
+    return dto;
   }
 
   @Query()
