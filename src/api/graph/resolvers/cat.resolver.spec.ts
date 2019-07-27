@@ -5,9 +5,12 @@ import { COMMAND_BUS, QUERY_BUS } from '../../../bus';
 import {
   CatAggregate,
   CatCommandResult,
+  CatId,
   CatInformation,
   FindAllCats,
   FindAllCatsQueryResult,
+  FindOneCatById,
+  FindOneCatQueryResult,
   ICommandBus,
   IQueryBus,
   RegisterCat,
@@ -83,5 +86,36 @@ describe('CatResolver', () => {
 
     expect(queries.ask).toHaveBeenCalledWith(new FindAllCats());
     expect(response.body.data.cats).toEqual(aggregates.map((aggregate) => CatDto.from(aggregate)));
+  });
+
+  it('should ask for finding one cat by id', async () => {
+    const aggregate = CatAggregate.register(new CatInformation('name'));
+    (queries.ask as jest.Mock).mockImplementationOnce(() => new FindOneCatQueryResult(aggregate));
+
+    const response: Response = await request(application.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `{ cat(id: "${aggregate.model.id.value}") { id name adopted } }`,
+      })
+      .expect(200);
+
+    expect(queries.ask).toHaveBeenCalledWith(new FindOneCatById(aggregate.model.id));
+    expect(response.body.data.cat).toEqual(CatDto.from(aggregate));
+  });
+
+  it('should throw a Not Found exception', async () => {
+    (queries.ask as jest.Mock).mockImplementationOnce(() => new FindOneCatQueryResult(null));
+
+    const response: Response = await request(application.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `{ cat(id: "${CatId.create()}") { id name adopted } }`,
+      })
+      .expect(200);
+
+    expect(response.body.errors[0].message).toEqual({
+      statusCode: 404,
+      error: 'Not Found',
+    });
   });
 });
