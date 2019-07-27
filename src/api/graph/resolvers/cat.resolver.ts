@@ -2,6 +2,7 @@ import { Inject } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { COMMAND_BUS, QUERY_BUS } from '../../../bus';
 import {
+  CatCommandResult,
   CatInformation,
   FindAllCats,
   FindAllCatsQueryResult,
@@ -23,8 +24,8 @@ export class CatResolver {
 
   @Mutation()
   public register(@Args('input') dto: CatDto): CatDto {
-    this.commands.dispatch(new RegisterCat(new CatInformation(dto.name!)));
-    return dto;
+    const result: CatCommandResult = this.commands.dispatch(new RegisterCat(new CatInformation(dto.name!)));
+    return CatDto.from(result.data);
   }
 
   @Query()

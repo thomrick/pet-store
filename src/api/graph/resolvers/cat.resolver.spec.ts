@@ -4,6 +4,7 @@ import request, { Response } from 'supertest';
 import { COMMAND_BUS, QUERY_BUS } from '../../../bus';
 import {
   CatAggregate,
+  CatCommandResult,
   CatInformation,
   FindAllCats,
   FindAllCatsQueryResult,
@@ -45,20 +46,18 @@ describe('CatResolver', () => {
   });
 
   it('should dispatch command to register a new cat', async () => {
+    const aggregate = CatAggregate.register(new CatInformation('name'));
+    (commands.dispatch as jest.Mock).mockImplementationOnce(() => new CatCommandResult(aggregate));
     const response: Response = await request(application.getHttpServer())
       .post('/graphql')
       .send({
         query: `mutation {
-          register(input: { name: "name"}) { name }
+          register(input: { name: "${aggregate.model.name}"}) { id name adopted }
         }`,
       })
       .expect(200);
     expect(commands.dispatch).toHaveBeenCalledWith(new RegisterCat(new CatInformation('name')));
-    // expect(response.body.data.register).toEqual({
-    //   id: jasmine.any(String),
-    //   name: 'name',
-    //   adopted: false,
-    // });
+    expect(response.body.data.register).toEqual(CatDto.from(aggregate));
   });
 
   it('should get all cats', async () => {
