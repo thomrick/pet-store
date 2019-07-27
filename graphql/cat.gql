@@ -8,3 +8,11 @@ type Query {
   cat(id: String!): Cat
   cats: [Cat]
 }
+
+input RegisterCatInput {
+  name: String!
+}
+
+type Mutation {
+  register(input: RegisterCatInput!): Cat
+}

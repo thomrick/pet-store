@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
+import { CatResolver } from './resolvers';
 
 @Module({
   imports: [
@@ -15,6 +16,9 @@ import { join } from 'path';
         outputAs: 'class',
       },
     }),
+  ],
+  providers: [
+    CatResolver,
   ],
 })
 export class GraphApiModule {}
