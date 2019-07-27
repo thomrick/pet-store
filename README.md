@@ -1,2 +1,3 @@
-# pet-store
-A pet-store system built with NestJS framework 
+# Pet Store
+
+A Pet Store system built with NestJS framework
