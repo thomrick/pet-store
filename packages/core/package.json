@@ -4,7 +4,8 @@
   "description": "Pet Store core module",
   "main": "lib/core.js",
   "scripts": {
-    "build": "tsc",
+    "build": "npm run -s clean && tsc",
+    "clean": "rm -rf dist/*",
     "test": "jest",
     "test:watch": "nodemon -w src -e ts --exec 'npm run -s test'"
   },
