@@ -1,5 +1,5 @@
 import { Provider } from '@nestjs/common';
-import { FindOneCatByIdQueryHandler, IQueryHandler } from '../../../core';
+import { FindAllCatsQueryHandler, FindOneCatByIdQueryHandler, IQueryHandler } from '../../../core';
 
 export const QUERY_HANDLERS: string = 'QueryHandlers';
 
@@ -10,5 +10,6 @@ export const QueryHandlers: Provider = {
   },
   inject: [
     FindOneCatByIdQueryHandler,
+    FindAllCatsQueryHandler,
   ],
 };
