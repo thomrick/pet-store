@@ -1,4 +1,4 @@
-import { ICommand, ICommandBus, ICommandHandler } from '../../../core';
+import { ICommand, ICommandBus, ICommandHandler, ICommandResult } from '../../../core';
 
 export class InMemoryCommandBus implements ICommandBus {
   private readonly handlers: Map<string, ICommandHandler>;
@@ -7,10 +7,13 @@ export class InMemoryCommandBus implements ICommandBus {
     this.handlers = new Map(handlers.map((handler) => [handler.subscribe(), handler]));
   }
 
-  public dispatch(command: ICommand): void {
+  public dispatch(command: ICommand): ICommandResult {
     const handler: ICommandHandler | undefined = this.handlers.get(command.name);
     if (!!handler) {
-      handler.handle(command);
+      return handler.handle(command);
     }
+    return {
+      data: null,
+    };
   }
 }
