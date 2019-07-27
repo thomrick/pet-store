@@ -4,6 +4,7 @@ import request, { Response } from 'supertest';
 import { COMMAND_BUS, QUERY_BUS } from '../../../bus';
 import {
   CatAggregate,
+  CatCommandResult,
   CatId,
   CatInformation,
   FindAllCats,
@@ -49,13 +50,18 @@ describe('CatsController', () => {
 
   it('POST /cats create a new cat', async () => {
     const dto = CatDto.with('name');
+    const aggregate = CatAggregate.register(new CatInformation(dto.name!));
+    (commands.dispatch as jest.Mock).mockImplementationOnce(
+      () => new CatCommandResult(aggregate),
+    );
 
-    await request(application.getHttpServer())
+    const response: Response = await request(application.getHttpServer())
       .post('/cats')
       .send(dto)
       .expect(201);
 
     expect(commands.dispatch).toHaveBeenCalledWith(new RegisterCat(new CatInformation(dto.name!)));
+    expect(response.body).toEqual(CatDto.from(aggregate));
   });
 
   it('POST /cats throw Bad Request Exception when required fields are not provided', async () => {

@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Inject, NotFoundException, Param, Post } from '@nestjs/common';
 import { COMMAND_BUS, QUERY_BUS } from '../../../bus';
 import {
+  CatCommandResult,
   CatId,
   CatInformation,
   FindAllCats,
@@ -25,8 +26,9 @@ export class CatsController {
   }
 
   @Post()
-  public create(@Body(CreateCatValidator) dto: CatDto) {
-    return this.commands.dispatch(new RegisterCat(new CatInformation(dto.name!)));
+  public create(@Body(CreateCatValidator) dto: CatDto): CatDto {
+    const result: CatCommandResult = this.commands.dispatch(new RegisterCat(new CatInformation(dto.name!)));
+    return CatDto.from(result.data);
   }
 
   @Get()
