@@ -66,6 +66,7 @@
     "node_modules",
     "dist",
     "src/**/*.spec.ts",
-    "index.d.ts"
+    "index.d.ts",
+    "index.js"
   ]
 }

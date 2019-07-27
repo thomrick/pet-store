@@ -2,7 +2,7 @@
   "name": "@pet-store/database",
   "version": "0.0.0",
   "description": "Pet store database module",
-  "author": "Thomas Ricart <thomasr2309@gmail.com>",
+  "author": "ThomRick",
   "homepage": "https://github.com/ThomRick/pet-store#readme",
   "license": "MIT",
   "main": "lib/database.js",
@@ -11,7 +11,10 @@
     "url": "git+https://github.com/ThomRick/pet-store.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "build": "npm run -s clean && tsc",
+    "clean": "rm -rf dist/*",
+    "test": "jest",
+    "test:watch": "nodemon -w src -e ts --exec 'npm run -s test'"
   },
   "bugs": {
     "url": "https://github.com/ThomRick/pet-store/issues"
