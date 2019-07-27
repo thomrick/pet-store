@@ -1,4 +1,5 @@
-import { CatAggregate, CatInformation, ICatRepository } from '../../domain';
+import { CatAggregate, CatId, CatInformation, ICatRepository } from '../../domain';
+import { CatCommandResult } from '../command-results';
 import { RegisterCat } from '../commands';
 import { ICommandHandler } from './command-handler.interface';
 import { RegisterCatCommandHandler } from './register-cat.command-handler';
@@ -12,8 +13,13 @@ describe('RegisterCatCommandHandler', () => {
     };
     const handler: ICommandHandler = new RegisterCatCommandHandler(repository);
 
-    handler.handle(new RegisterCat(new CatInformation('name')));
+    const result: CatCommandResult = handler.handle(new RegisterCat(new CatInformation('name')));
 
     expect(repository.save).toHaveBeenCalledWith(jasmine.any(CatAggregate));
+    expect(result.data.model).toEqual({
+      _id: jasmine.any(CatId),
+      _name: 'name',
+      _adopted: false,
+    });
   });
 });

@@ -5,6 +5,7 @@ import {
   CatNotFoundException,
   ICatRepository,
 } from '../../domain';
+import { CatCommandResult } from '../command-results';
 import { AdoptCat } from '../commands';
 import { AdoptCatCommandHandler } from './adopt-cat.command-handler';
 import { ICommandHandler } from './command-handler.interface';
@@ -24,14 +25,17 @@ describe('AdoptCatCommandHandler', () => {
 
   it('should adopt the cat', () => {
     const aggregate = CatAggregate.register(new CatInformation('name'));
-    spyOn(aggregate, 'adopt');
     (repository.get as jest.Mock).mockImplementationOnce(() => aggregate);
 
-    handler.handle(new AdoptCat(aggregate.model.id));
+    const result: CatCommandResult = handler.handle(new AdoptCat(aggregate.model.id));
 
     expect(repository.get).toHaveBeenCalledWith(aggregate.model.id);
-    expect(aggregate.adopt).toHaveBeenCalled();
     expect(repository.save).toHaveBeenCalledWith(aggregate);
+    expect(result.data.model).toEqual({
+      _id: jasmine.any(CatId),
+      _name: 'name',
+      _adopted: true,
+    });
   });
 
   it('should throw an error when cat is not found', () => {

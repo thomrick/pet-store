@@ -1,4 +1,5 @@
 import { CatAggregate, ICatRepository } from '../../domain';
+import { CatCommandResult } from '../command-results';
 import { RegisterCat } from '../commands';
 import { ICommandHandler } from './command-handler.interface';
 
@@ -9,9 +10,10 @@ export class RegisterCatCommandHandler implements ICommandHandler {
     this.repository = repository;
   }
 
-  public handle(command: RegisterCat): void {
+  public handle(command: RegisterCat): CatCommandResult {
     const aggregate = CatAggregate.register(command.information);
     this.repository.save(aggregate);
+    return new CatCommandResult(aggregate);
   }
 
   public subscribe(): string {
