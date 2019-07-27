@@ -16,6 +16,11 @@ export class CatsController {
     return this.service.create(dto);
   }
 
+  @Get()
+  public findAll(): CatDto[] {
+    return this.service.findAll();
+  }
+
   @Get(':id')
   public findOneById(@Param('id') id: string) {
     return this.service.findOneById(id);

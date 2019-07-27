@@ -5,6 +5,8 @@ import {
   CatAggregate,
   CatId,
   CatInformation,
+  FindAllCats,
+  FindAllCatsQueryResult,
   FindOneCatById,
   FindOneCatQueryResult,
   ICommandBus,
@@ -64,5 +66,17 @@ describe('CatsService', () => {
     (queries.ask as jest.Mock).mockImplementationOnce(() => new FindOneCatQueryResult(null));
 
     expect(() => service.findOneById(id.value)).toThrow(NotFoundException);
+  });
+
+  it('should query all cats', () => {
+    const aggregates = [
+      CatAggregate.register(new CatInformation('name')),
+    ];
+    (queries.ask as jest.Mock).mockImplementationOnce(() => new FindAllCatsQueryResult(aggregates));
+
+    const result: CatDto[] = service.findAll();
+
+    expect(queries.ask).toHaveBeenCalledWith(new FindAllCats());
+    expect(result).toEqual(aggregates.map((aggregate) => CatDto.from(aggregate)));
   });
 });

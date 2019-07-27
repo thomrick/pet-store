@@ -23,6 +23,7 @@ describe('CatsController', () => {
     .useValue({
       create: jest.fn(),
       findOneById: jest.fn(),
+      findAll: jest.fn(),
     })
     .compile();
     application = module.createNestApplication();
@@ -78,5 +79,17 @@ describe('CatsController', () => {
     return request(application.getHttpServer())
       .get(`/cats/fake-id`)
       .expect(404);
+  });
+
+  it('GET /cats shoud return all cats', async () => {
+    (service.findAll as jest.Mock).mockImplementationOnce(() => []);
+
+    return request(application.getHttpServer())
+      .get('/cats')
+      .expect(200)
+      .then((response: Response) => {
+        expect(service.findAll).toHaveBeenCalled();
+        expect(response.body).toEqual([]);
+      });
   });
 });

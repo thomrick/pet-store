@@ -3,6 +3,8 @@ import { COMMAND_BUS, QUERY_BUS } from '../../bus';
 import {
   CatId,
   CatInformation,
+  FindAllCats,
+  FindAllCatsQueryResult,
   FindOneCatById,
   FindOneCatQueryResult,
   ICommandBus,
@@ -34,5 +36,10 @@ export class CatsService {
       throw new NotFoundException();
     }
     return CatDto.from(result.data);
+  }
+
+  public findAll(): CatDto[] {
+    const result: FindAllCatsQueryResult = this.queries.ask(new FindAllCats());
+    return result.data.map((aggregate) => CatDto.from(aggregate));
   }
 }
