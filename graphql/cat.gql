@@ -1,0 +1,10 @@
+type Cat {
+  id: String
+  name: String!
+  adopted: Boolean
+}
+
+type Query {
+  cat(id: String!): Cat
+  cats: [Cat]
+}
