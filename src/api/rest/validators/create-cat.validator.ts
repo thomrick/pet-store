@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
-import { CatDto } from '../dto';
+import { CatDto } from '../../dto';
 
 @Injectable()
 export class CreateCatValidator implements PipeTransform<CatDto, CatDto> {

@@ -1,5 +1,5 @@
 import { Inject, NotFoundException } from '@nestjs/common';
-import { COMMAND_BUS, QUERY_BUS } from '../../bus';
+import { COMMAND_BUS, QUERY_BUS } from '../../../bus';
 import {
   CatId,
   CatInformation,
@@ -10,8 +10,8 @@ import {
   ICommandBus,
   IQueryBus,
   RegisterCat,
-} from '../../core';
-import { CatDto } from '../dto';
+} from '../../../core';
+import { CatDto } from '../../dto';
 
 export class CatsService {
   private readonly commands: ICommandBus;

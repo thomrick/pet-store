@@ -1,10 +1,12 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
+import { BusModule } from '../../bus';
 import { CatResolver } from './resolvers';
 
 @Module({
   imports: [
+    forwardRef(() => BusModule),
     GraphQLModule.forRoot({
       debug: false,
       playground: true,

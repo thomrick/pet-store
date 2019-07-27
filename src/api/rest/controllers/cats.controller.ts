@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { CatDto } from '../dto';
+import { CatDto } from '../../dto';
 import { CatsService } from '../services';
 import { CreateCatValidator } from '../validators';
 

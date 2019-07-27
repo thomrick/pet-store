@@ -1,5 +1,5 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { BusModule } from '../bus';
+import { BusModule } from '../../bus';
 import { CatsController } from './controllers';
 import { CatsService } from './services';
 

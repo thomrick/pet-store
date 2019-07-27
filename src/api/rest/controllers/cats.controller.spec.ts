@@ -1,8 +1,8 @@
 import { INestApplication, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request, { Response } from 'supertest';
-import { CatAggregate, CatInformation } from '../../core';
-import { CatDto } from '../dto';
+import { CatAggregate, CatInformation } from '../../../core';
+import { CatDto } from '../../dto';
 import { CatsService } from '../services';
 import { CatsController } from './cats.controller';
 
