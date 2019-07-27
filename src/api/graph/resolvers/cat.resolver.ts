@@ -2,6 +2,7 @@ import { Inject } from '@nestjs/common';
 import { Query, Resolver } from '@nestjs/graphql';
 import { COMMAND_BUS, QUERY_BUS } from '../../../bus';
 import { FindAllCats, FindAllCatsQueryResult, ICommandBus, IQueryBus } from '../../../core';
+import { CatDto } from '../../dto';
 
 @Resolver('Cat')
 export class CatResolver {
@@ -14,8 +15,8 @@ export class CatResolver {
   }
 
   @Query()
-  public cats(): any[] {
+  public cats(): CatDto[] {
     const result: FindAllCatsQueryResult = this.queries.ask(new FindAllCats());
-    return result.data;
+    return result.data.map((aggregate) => CatDto.from(aggregate));
   }
 }

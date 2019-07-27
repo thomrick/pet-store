@@ -2,7 +2,15 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request, { Response } from 'supertest';
 import { COMMAND_BUS, QUERY_BUS } from '../../../bus';
-import { FindAllCats, FindAllCatsQueryResult, ICommandBus, IQueryBus } from '../../../core';
+import {
+  CatAggregate,
+  CatInformation,
+  FindAllCats,
+  FindAllCatsQueryResult,
+  ICommandBus,
+  IQueryBus,
+} from '../../../core';
+import { CatDto } from '../../dto';
 import { GraphApiModule } from '../graph-api.module';
 
 describe('CatResolver', () => {
@@ -27,7 +35,12 @@ describe('CatResolver', () => {
     const commands: ICommandBus = application.get(COMMAND_BUS);
     const queries: IQueryBus = application.get(QUERY_BUS);
 
-    (queries.ask as jest.Mock).mockImplementationOnce(() => new FindAllCatsQueryResult([]));
+    const aggregates = [
+      CatAggregate.register(new CatInformation('nameA')),
+      CatAggregate.register(new CatInformation('nameB')),
+      CatAggregate.register(new CatInformation('nameC')),
+    ];
+    (queries.ask as jest.Mock).mockImplementationOnce(() => new FindAllCatsQueryResult(aggregates));
 
     const response: Response = await request(application.getHttpServer())
       .post('/graphql')
@@ -45,6 +58,6 @@ describe('CatResolver', () => {
       .expect(200);
 
     expect(queries.ask).toHaveBeenCalledWith(new FindAllCats());
-    expect(response.body.data.cats).toEqual([]);
+    expect(response.body.data.cats).toEqual(aggregates.map((aggregate) => CatDto.from(aggregate)));
   });
 });

@@ -1,34 +1,46 @@
-import { INestApplication, NotFoundException } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request, { Response } from 'supertest';
-import { CatAggregate, CatInformation } from '../../../core';
+import { COMMAND_BUS, QUERY_BUS } from '../../../bus';
+import {
+  CatAggregate,
+  CatId,
+  CatInformation,
+  FindAllCats,
+  FindAllCatsQueryResult,
+  FindOneCatById,
+  FindOneCatQueryResult,
+  ICommandBus,
+  IQueryBus,
+  RegisterCat,
+} from '../../../core';
 import { CatDto } from '../../dto';
-import { CatsService } from '../services';
-import { CatsController } from './cats.controller';
+import { RestApiModule } from '../rest-api.module';
 
 describe('CatsController', () => {
   let application: INestApplication;
-  let service: CatsService;
+  let commands: ICommandBus;
+  let queries: IQueryBus;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [
-        CatsController,
-      ],
-      providers: [
-        CatsService,
+      imports: [
+        RestApiModule,
       ],
     })
-    .overrideProvider(CatsService)
+    .overrideProvider(COMMAND_BUS)
     .useValue({
-      create: jest.fn(),
-      findOneById: jest.fn(),
-      findAll: jest.fn(),
+      dispatch: jest.fn(),
+    })
+    .overrideProvider(QUERY_BUS)
+    .useValue({
+      ask: jest.fn(),
     })
     .compile();
     application = module.createNestApplication();
     await application.init();
-    service = module.get(CatsService);
+    commands = module.get(COMMAND_BUS);
+    queries = module.get(QUERY_BUS);
   });
 
   afterEach(async () => {
@@ -38,43 +50,35 @@ describe('CatsController', () => {
   it('POST /cats create a new cat', async () => {
     const dto = CatDto.with('name');
 
-    return request(application.getHttpServer())
+    await request(application.getHttpServer())
       .post('/cats')
       .send(dto)
-      .expect(201)
-      .then(() => {
-        expect(service.create).toHaveBeenCalledWith(dto);
-      });
+      .expect(201);
+
+    expect(commands.dispatch).toHaveBeenCalledWith(new RegisterCat(new CatInformation(dto.name!)));
   });
 
   it('POST /cats throw Bad Request Exception when required fields are not provided', async () => {
-    return request(application.getHttpServer())
+    await request(application.getHttpServer())
       .post('/cats')
       .send({})
-      .expect(400)
-      .then(() => {
-        expect(service.create).not.toHaveBeenCalled();
-      });
+      .expect(400);
   });
 
   it('GET /cats/:id should return a found cat dto', async () => {
     const aggregate = CatAggregate.register(new CatInformation('name'));
     const dto = CatDto.from(aggregate);
-    (service.findOneById as jest.Mock).mockImplementationOnce(() => dto);
+    (queries.ask as jest.Mock).mockImplementationOnce(() => new FindOneCatQueryResult(aggregate));
 
-    return request(application.getHttpServer())
+    const response: Response = await request(application.getHttpServer())
       .get(`/cats/${aggregate.model.id.value}`)
-      .expect(200)
-      .then((response: Response) => {
-        expect(service.findOneById).toHaveBeenCalledWith(aggregate.model.id.value);
-        expect(response.body).toEqual(dto);
-      });
+      .expect(200);
+    expect(queries.ask).toHaveBeenCalledWith(new FindOneCatById(CatId.from(aggregate.model.id.value)));
+    expect(response.body).toEqual(dto);
   });
 
   it('GET /cats/:id throw a Not Found exception when cat by id is not found', async () => {
-    (service.findOneById as jest.Mock).mockImplementationOnce(() => {
-      throw new NotFoundException();
-    });
+    (queries.ask as jest.Mock).mockImplementationOnce(() => new FindOneCatQueryResult(null));
 
     return request(application.getHttpServer())
       .get(`/cats/fake-id`)
@@ -82,14 +86,12 @@ describe('CatsController', () => {
   });
 
   it('GET /cats shoud return all cats', async () => {
-    (service.findAll as jest.Mock).mockImplementationOnce(() => []);
+    (queries.ask as jest.Mock).mockImplementationOnce(() => new FindAllCatsQueryResult([]));
 
-    return request(application.getHttpServer())
+    const response: Response = await request(application.getHttpServer())
       .get('/cats')
-      .expect(200)
-      .then((response: Response) => {
-        expect(service.findAll).toHaveBeenCalled();
-        expect(response.body).toEqual([]);
-      });
+      .expect(200);
+    expect(queries.ask).toHaveBeenCalledWith(new FindAllCats());
+    expect(response.body).toEqual([]);
   });
 });

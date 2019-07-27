@@ -1,7 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { BusModule } from '../../bus';
 import { CatsController } from './controllers';
-import { CatsService } from './services';
 
 @Module({
   imports: [
@@ -9,9 +8,6 @@ import { CatsService } from './services';
   ],
   controllers: [
     CatsController,
-  ],
-  providers: [
-    CatsService,
   ],
 })
 export class RestApiModule {}
