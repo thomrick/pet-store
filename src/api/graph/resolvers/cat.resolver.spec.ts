@@ -60,7 +60,7 @@ describe('CatResolver', () => {
     expect(response.body.data.register).toEqual(CatDto.from(aggregate));
   });
 
-  it('should get all cats', async () => {
+  it('should ask for all cats', async () => {
     const aggregates = [
       CatAggregate.register(new CatInformation('nameA')),
       CatAggregate.register(new CatInformation('nameB')),
