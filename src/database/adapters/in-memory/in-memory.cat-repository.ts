@@ -18,4 +18,15 @@ export class InMemoryCatRepository implements ICatRepository {
     const events: ICatEvent[] | undefined = this.database.get(id);
     return !!events ? CatAggregate.rebuild(events) : null;
   }
+
+  public getAll(): CatAggregate[] {
+    const aggregates: CatAggregate[] = [];
+    const iterator: Iterator<ICatEvent[]> = this.database.values();
+    let next: IteratorResult<ICatEvent[]> = iterator.next();
+    while (!next.done) {
+      aggregates.push(CatAggregate.rebuild(next.value));
+      next = iterator.next();
+    }
+    return aggregates;
+  }
 }

@@ -16,6 +16,7 @@ describe('AdoptCatCommandHandler', () => {
   beforeEach(() => {
     repository = {
       get: jest.fn(),
+      getAll: jest.fn(),
       save: jest.fn(),
     };
     handler = new AdoptCatCommandHandler(repository);

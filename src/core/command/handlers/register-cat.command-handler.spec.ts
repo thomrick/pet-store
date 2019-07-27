@@ -7,6 +7,7 @@ describe('RegisterCatCommandHandler', () => {
   it('should save the registered cat', () => {
     const repository: ICatRepository = {
       get: jest.fn(),
+      getAll: jest.fn(),
       save: jest.fn(),
     };
     const handler: ICommandHandler = new RegisterCatCommandHandler(repository);

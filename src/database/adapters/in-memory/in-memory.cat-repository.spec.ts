@@ -2,11 +2,17 @@ import { CatAggregate, CatId, CatInformation, CatRegistered, ICatEvent, ICatRepo
 import { InMemoryCatRepository } from './in-memory.cat-repository';
 
 describe('InMemoryCatRepository', () => {
+  let database: Map<CatId, ICatEvent[]>;
+  let repository: ICatRepository;
+
+  beforeEach(() => {
+    database = new Map();
+    repository = new InMemoryCatRepository(database);
+  });
+
   it('should save aggregate in the database', () => {
     const information = new CatInformation('name');
     const aggregate = CatAggregate.register(information);
-    const database: Map<CatId, ICatEvent[]> = new Map();
-    const repository: ICatRepository = new InMemoryCatRepository(database);
 
     repository.save(aggregate);
 
@@ -16,9 +22,7 @@ describe('InMemoryCatRepository', () => {
   it('should return an aggregate by its id', () => {
     const information = new CatInformation('name');
     const aggregate = CatAggregate.register(information);
-    const database: Map<CatId, ICatEvent[]> = new Map();
     database.set(aggregate.model.id, aggregate.uncommittedChanges);
-    const repository: ICatRepository = new InMemoryCatRepository(database);
 
     const found: CatAggregate | null = repository.get(aggregate.model.id);
 
@@ -27,11 +31,22 @@ describe('InMemoryCatRepository', () => {
 
   it('should return null when aggregate does not exist', () => {
     const id = CatId.create();
-    const database: Map<CatId, ICatEvent[]> = new Map();
-    const repository: ICatRepository = new InMemoryCatRepository(database);
 
     const found: CatAggregate | null = repository.get(id);
 
     expect(found).toEqual(null);
+  });
+
+  it('should return all the cats', () => {
+    const aggregates = [
+      CatAggregate.register(new CatInformation('name1')),
+      CatAggregate.register(new CatInformation('name2')),
+      CatAggregate.register(new CatInformation('name3')),
+    ];
+    aggregates.forEach((aggregate) => database.set(aggregate.model.id, aggregate.uncommittedChanges));
+
+    const founds: CatAggregate[] = repository.getAll();
+
+    expect(founds).toEqual(aggregates);
   });
 });
