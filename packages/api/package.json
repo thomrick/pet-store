@@ -4,8 +4,9 @@
   "description": "Pet Store APIs",
   "main": "index.js",
   "scripts": {
-    "build": "npm run -s clean && tsc",
+    "build": "npm run -s clean && npm run -s generate-types && tsc",
     "clean": "rm -rf dist/*",
+    "generate-types": "ts-node src/graph/generate-type.ts",
     "test": "jest",
     "test:watch": "nodemon -w src -e ts --exec 'npm run -s test'"
   },

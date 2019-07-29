@@ -11,7 +11,7 @@ import { CatResolver } from './resolvers';
       debug: false,
       playground: true,
       typePaths: [
-        join(process.cwd(), 'graphql/**/*.gql'),
+        join(__dirname, '../..', 'graphql/**/*.gql'),
       ],
       definitions: {
         path: join(__dirname, 'graphql.ts'),
