@@ -1,7 +1,7 @@
 {
   "name": "@pet-store/core",
   "version": "0.0.0",
-  "description": "Pet Store core module",
+  "description": "Pet Store Core Module",
   "main": "lib/core.js",
   "scripts": {
     "build": "npm run -s clean && tsc",

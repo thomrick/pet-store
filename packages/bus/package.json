@@ -22,5 +22,17 @@
   "dependencies": {
     "@pet-store/core": "^0.0.0",
     "@pet-store/database": "^0.0.0"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^6.5.3",
+    "@nestjs/core": "^6.5.3",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.5.2"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^6.5.3",
+    "@nestjs/core": "^6.5.3",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.5.2"
   }
 }
