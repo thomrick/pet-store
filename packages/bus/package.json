@@ -1,0 +1,38 @@
+{
+  "name": "@pet-store/bus",
+  "version": "0.0.0",
+  "description": "Pet Store Bus Module",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run -s clean && tsc",
+    "clean": "rm -rf dist/*",
+    "test": "jest",
+    "test:watch": "nodemon -w src -e ts --exec 'npm run -s test'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThomRick/pet-store.git"
+  },
+  "author": "ThomRick",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ThomRick/pet-store/issues"
+  },
+  "homepage": "https://github.com/ThomRick/pet-store#readme",
+  "dependencies": {
+    "@pet-store/core": "^0.0.0",
+    "@pet-store/database": "^0.0.0"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^6.5.3",
+    "@nestjs/core": "^6.5.3",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.5.2"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^6.5.3",
+    "@nestjs/core": "^6.5.3",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.5.2"
+  }
+}

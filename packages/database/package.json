@@ -1,0 +1,37 @@
+{
+  "name": "@pet-store/database",
+  "version": "0.0.0",
+  "description": "Pet Store Database Module",
+  "author": "ThomRick",
+  "homepage": "https://github.com/ThomRick/pet-store#readme",
+  "license": "MIT",
+  "main": "lib/database.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThomRick/pet-store.git"
+  },
+  "scripts": {
+    "build": "npm run -s clean && tsc",
+    "clean": "rm -rf dist/*",
+    "test": "jest",
+    "test:watch": "nodemon -w src -e ts --exec 'npm run -s test'"
+  },
+  "bugs": {
+    "url": "https://github.com/ThomRick/pet-store/issues"
+  },
+  "dependencies": {
+    "@pet-store/core": "^0.0.0"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^6.5.3",
+    "@nestjs/core": "^6.5.3",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.5.2"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^6.5.3",
+    "@nestjs/core": "^6.5.3",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.5.2"
+  }
+}
