@@ -4,7 +4,8 @@
   "description": "Pet Store APIs",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "npm run -s clean && tsc",
+    "clean": "rm -rf dist/*",
     "test": "jest",
     "test:watch": "nodemon -w src -e ts --exec 'npm run -s test'"
   },
@@ -41,6 +42,11 @@
   "peerDependencies": {
     "@nestjs/common": "^6.5.3",
     "@nestjs/core": "^6.5.3",
+    "@nestjs/graphql": "^6.4.2",
+    "@nestjs/platform-express": "^6.5.3",
+    "apollo-server-express": "^2.7.2",
+    "graphql": "^14.4.2",
+    "graphql-tools": "^4.0.5",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.2"
   }
