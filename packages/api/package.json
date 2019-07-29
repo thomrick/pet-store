@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm run -s clean && npm run -s generate-types && tsc",
     "clean": "rm -rf dist/*",
-    "generate-types": "ts-node src/graph/generate-type.ts",
+    "generate-types": "ts-node src/graph/generate-types.ts",
     "test": "jest",
     "test:watch": "nodemon -w src -e ts --exec 'npm run -s test'"
   },

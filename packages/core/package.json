@@ -18,5 +18,11 @@
   },
   "bugs": {
     "url": "https://github.com/ThomRick/pet-store/issues"
+  },
+  "dependencies": {
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/uuid": "^3.4.5"
   }
 }

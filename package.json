@@ -4,46 +4,22 @@
   "description": "A Nest application that use many recipes about Nest framework",
   "main": "index.js",
   "scripts": {
-    "build": "npm run -s generate-types && npm run -s tsc",
-    "compile": "tsc",
-    "generate-types": "ts-node src/graph-api/generate-types.ts",
+    "add": "lerna add",
+    "bootstrap": "lerna bootstrap",
+    "build": "lerna run build --stream",
     "lerna": "lerna",
-    "start": "node dist/main.js",
-    "start:dev": "ts-node src/main.ts",
-    "start:dev:watch": "nodemon -w src -e ts --exec 'npm run -s start:dev'",
-    "test": "jest",
-    "test:watch": "nodemon -w src -e ts --exec 'npm run -s test'"
+    "test": "lerna run test --stream"
   },
   "author": "ThomRick",
   "license": "MIT",
-  "dependencies": {
-    "@nestjs/common": "^6.5.3",
-    "@nestjs/core": "^6.5.3",
-    "@nestjs/graphql": "^6.4.2",
-    "@nestjs/microservices": "^6.5.3",
-    "@nestjs/platform-express": "^6.5.3",
-    "apollo-server-express": "^2.7.2",
-    "graphql": "^14.4.2",
-    "graphql-tools": "^4.0.5",
-    "hbs": "^4.0.4",
-    "reflect-metadata": "^0.1.13",
-    "rxjs": "^6.5.2",
-    "uuid": "^3.3.2"
-  },
   "devDependencies": {
-    "@nestjs/testing": "^6.5.3",
-    "@types/express": "^4.17.0",
     "@types/jest": "^24.0.15",
     "@types/node": "^12.6.8",
-    "@types/supertest": "^2.0.8",
-    "@types/uuid": "^3.4.5",
     "jest": "^24.8.0",
     "lerna": "^3.16.4",
     "nodemon": "^1.19.1",
-    "supertest": "^4.0.2",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
-    "tslint": "^5.18.0",
     "typescript": "^3.5.3"
   }
 }
